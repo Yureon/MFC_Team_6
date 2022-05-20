@@ -42,6 +42,7 @@ CMFCTeamProjectView::CMFCTeamProjectView() noexcept
 	bd.Difficulty(1);
 	bd.Reset();
 	bd.timer = 0;
+	Windowbox = CRect(0, 0, 550, 600);
 	
 }
 
@@ -68,7 +69,7 @@ void CMFCTeamProjectView::OnDraw(CDC* pDC)
 
 	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
 	
-	DrawReset_Button(pDC);
+	DrawButton(pDC);
 	DrawBox(pDC);
 }
 
@@ -120,6 +121,25 @@ void CMFCTeamProjectView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
+	if (Windowbox.PtInRect(point)) {
+		for (int i = 0; i < bd.boxCount; i++) {
+			for (int j = 0; j < bd.boxCount; j++) {
+				if (bd.m_board[i][j].PtInRect(point)) {
+					bd.chas_x = i;
+					bd.chas_y = j;
+				}
+			}
+		}
+
+		bd.check[bd.chas_x][bd.chas_y] = 1;
+
+		if (bd.check[bd.chas_x][bd.chas_y] == 1 && bd.mine[bd.chas_x][bd.chas_y] < 0) {
+
+		}
+	}
+
+	
+
 	CView::OnLButtonDown(nFlags, point);
 }
 
@@ -160,16 +180,17 @@ void CMFCTeamProjectView::OnDifficultyChallenge()
 }
 
 
-void CMFCTeamProjectView::DrawReset_Button(CDC* pDC)
+void CMFCTeamProjectView::DrawButton(CDC* pDC)
 {
 	// TODO: 여기에 구현 코드 추가.
 	CRect Textbox_Reset(230, 30, 280, 50);
 	CRect Textbox_Timer(80, 60, 180, 80);
 	CRect Textbox_Score(330, 60, 430, 80);
-	CRect Windowbox(0, 0, 550, 600);
+
 	CString Reset("초기화");
 	CString Timer("시간: ");
 	CString Score("점수:");
+
 
 	pDC->Rectangle(Windowbox);
 	pDC->Rectangle(Textbox_Reset);

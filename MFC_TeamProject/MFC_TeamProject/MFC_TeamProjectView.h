@@ -48,8 +48,9 @@ public:
 	afx_msg void OnDifficultyMiddle();
 	afx_msg void OnDifficultyHard();
 	afx_msg void OnDifficultyChallenge();
-	void DrawReset_Button(CDC* pDC);
+	void DrawButton(CDC* pDC);
 	void DrawBox(CDC* pDC);
+	CRect Windowbox; //배경으로 쓸 박스
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전

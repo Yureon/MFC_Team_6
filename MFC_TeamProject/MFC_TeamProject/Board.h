@@ -17,7 +17,6 @@ public:
 	int timer; // 게임 시작 시간을 저장할 변수
 	int score; // 점수를 저장할 변수
 
-
 	void Difficulty(int mode); //난이도에 따라 박스의 개수나 상자의 크기를 변화시킬 메소드 (1 - Easy / 2 - Middle / 3 - Hard / 4 - Challange)
 	void RandomMine(); // mine배열에 랜덤으로 지뢰를 할당하는 메소드
 	void Scanbox(); // 지뢰를 설치한 후 주위의 박스에 숫자를 삽입하는 메소드
