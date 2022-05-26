@@ -21,13 +21,13 @@ void Board::Difficulty(int mode) {
 	else if (mode == 3) {
 		boxCount = 28;
 		boxSize = 16;
-		mineCount = rand() % 12 + 11; //최소 11개 최대 22개
+		mineCount = rand() % 40 + 40; //최소 40개 최대 79개
 	}
 	//모드3 = Hard
 	else if (mode == 4) {
 		boxCount = 35;
 		boxSize = 12;
-		mineCount = rand() % 15 + 14; // 최소 14개 최대 28개
+		mineCount = rand() % 80 + 70; // 최소 70개 최대 159개
 	}
 	//모드4 = Challenge
 }
@@ -64,16 +64,16 @@ void Board::Scanbox() {
 		for (int j = 1; j < boxCount; j++) {
 			if (mine[i][j] < 0) {
 				
-				mine[i - 1][j - 1] = mine[i - 1][j - 1] + 1;
-				mine[i][j-1] = mine[i][j - 1] + 1;
-				mine[i + 1][j - 1] = mine[j + 1][j - 1] + 1;
+				mine[i - 1][j - 1]++;
+				mine[i][j-1]++;
+				mine[i + 1][j - 1]++;
 				
-				mine[i - 1][j] = mine[i - 1][j] + 1;
-				mine[i + 1][j] = mine[i + 1][j] + 1;
+				mine[i - 1][j]++;
+				mine[i + 1][j]++;
 
-				mine[i - 1][j + 1] = mine[j - 1][j + 1] + 1;
-				mine[i][j + 1] = mine[i][j + 1] + 1;
-				mine[i + 1][j + 1] = mine[i + 1][j + 1] + 1;
+				mine[i - 1][j + 1]++;
+				mine[i][j + 1]++;
+				mine[i + 1][j + 1]++;
 			}
 		}
 	}

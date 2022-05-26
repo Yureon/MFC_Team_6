@@ -42,15 +42,33 @@ protected:
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
-	Board bd;
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnDifficultyEasy();
-	afx_msg void OnDifficultyMiddle();
-	afx_msg void OnDifficultyHard();
-	afx_msg void OnDifficultyChallenge();
-	void DrawButton(CDC* pDC);
-	void DrawBox(CDC* pDC);
+	Board bd;// 상자들의 좌표,상자에 지뢰를 넣는 메소드,지뢰 주위에 상자 계산하는 메소드들이 있는 해시파일
+
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);	//마우스 좌클
+	afx_msg void OnDifficultyEasy();	//난이도
+	afx_msg void OnDifficultyMiddle();	//난이도
+	afx_msg void OnDifficultyHard();	//난이도
+	afx_msg void OnDifficultyChallenge();	//난이도
+	
+	
+	void DrawFlag(CDC* pDC); // Ondraw에서 깃발을 그리기 위한 메소드
+	
+	bool Game_status; // 게임이 진행중인지,정지된 건지 확인하기 위한 변수 ( True - 진행중 / False - 승리 or 패배 )
+	void DrawNumber(CDC* pDC); // Ondraw에서 상자에 숫자를 넣기 위한 메소드
+	CString str; // 박스에 숫자 채워 넣을 때 int -> CString 변환을 위한 버퍼
+	
+	
+				 
+				 /*레이아웃을 위한 변수들*/
+	void DrawButton(CDC* pDC); // 초기화 버튼,점수,시간을 그리기 위한 메소드
+	void DrawBox(CDC* pDC); // 박스 상자를 그리기 위한 메소드
 	CRect Windowbox; //배경으로 쓸 박스
+	CRect Textbox_Reset;
+	CRect Textbox_Timer;
+	CRect Textbox_Score;
+	CString Reset;
+	CString Timer;
+	CString Score;
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전
