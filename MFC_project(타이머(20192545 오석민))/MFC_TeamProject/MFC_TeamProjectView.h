@@ -1,0 +1,68 @@
+﻿
+// MFC_TeamProjectView.h: CMFCTeamProjectView 클래스의 인터페이스
+//
+
+#pragma once
+#include "Board.h"
+#include <atlstr.h>
+
+class CMFCTeamProjectView : public CView
+{
+protected: // serialization에서만 만들어집니다.
+	CMFCTeamProjectView() noexcept;
+	DECLARE_DYNCREATE(CMFCTeamProjectView)
+
+// 특성입니다.
+public:
+	CMFCTeamProjectDoc* GetDocument() const;
+
+// 작업입니다.
+public:
+
+// 재정의입니다.
+public:
+	virtual void OnDraw(CDC* pDC);  // 이 뷰를 그리기 위해 재정의되었습니다.
+	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+protected:
+	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
+	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
+	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
+
+// 구현입니다.
+public:
+	virtual ~CMFCTeamProjectView();
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+
+#endif
+
+
+protected:
+
+// 생성된 메시지 맵 함수
+protected:
+	DECLARE_MESSAGE_MAP()
+public:
+	Board bd;
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnDifficultyEasy();
+	afx_msg void OnDifficultyMiddle();
+	afx_msg void OnDifficultyHard();
+	afx_msg void OnDifficultyChallenge();
+	void DrawButton(CDC* pDC); // 초기화 버튼,점수,시간을 그리기 위한 메소드
+	void DrawBox(CDC* pDC); // 박스 상자를 그리기 위한 메소드
+	void OnTimer(UINT_PTR nIDEvent);
+	void OnDestroy();
+	CRect Windowbox; //배경으로 쓸 박스
+	void DrawFlag(CDC* pDC); // Ondraw에서 깃발을 그리기 위한 메소드
+	CString str; // 박스에 숫자 채워 넣을 때 int -> CString 변환을 위한 버퍼
+	bool Game_status; // 게임이 진행중인지,정지된 건지 확인하기 위한 변수 ( True - 진행중 / False - 승리 or 패배 )
+	void DrawNumber(CDC* pDC);
+};
+
+#ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전
+inline CMFCTeamProjectDoc* CMFCTeamProjectView::GetDocument() const
+   { return reinterpret_cast<CMFCTeamProjectDoc*>(m_pDocument); }
+#endif
+
