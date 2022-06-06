@@ -79,7 +79,17 @@ void Board::Scanbox() {
 	}
 }
 
+void Board::Reset_check() {
+
+	for (int i = 0; i < 36; i++) {
+		for (int j = 0; j < 36; j++) {
+			check[i][j] = 0;
+		}
+	}
+}
+
 void Board::Reset() {
+	Reset_check();
 	RandomMine();
 	Scanbox();
 }

@@ -21,7 +21,8 @@ public:
 	
 	void RandomMine(); // mine배열에 랜덤으로 지뢰를 할당하는 메소드
 	void Scanbox(); // 지뢰를 설치한 후 주위의 박스에 숫자를 삽입하는 메소드
-	
+	void Reset_check(); // 유저가 클릭한 것들을 초기화 하는 메소드
+
 	void Reset(); //Reset,RandomMine,Scanbox를 합친 메소드
 };
 

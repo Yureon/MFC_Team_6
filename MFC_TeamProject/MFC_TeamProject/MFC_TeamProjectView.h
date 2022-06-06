@@ -51,12 +51,9 @@ public:
 	afx_msg void OnDifficultyChallenge();	//난이도
 	
 	
-	void DrawFlag(CDC* pDC); // Ondraw에서 깃발을 그리기 위한 메소드
-	
 	bool Game_status; // 게임이 진행중인지,정지된 건지 확인하기 위한 변수 ( True - 진행중 / False - 승리 or 패배 )
 	void DrawNumber(CDC* pDC); // Ondraw에서 상자에 숫자를 넣기 위한 메소드
 	CString str; // 박스에 숫자 채워 넣을 때 int -> CString 변환을 위한 버퍼
-	
 	
 				 
 				 /*레이아웃을 위한 변수들*/
@@ -69,6 +66,9 @@ public:
 	CString Reset;
 	CString Timer;
 	CString Score;
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	void DrawFlag(CDC* pDC);
+	bool DrawFromFile(CDC* pDC, int destX, int destY, int destWidth, int destHeight, LPCWSTR filePath, int srcX, int srcY);
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전
