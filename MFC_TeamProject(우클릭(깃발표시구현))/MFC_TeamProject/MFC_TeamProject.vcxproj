@@ -213,7 +213,6 @@
     <None Include="res\MFCTeamProject.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\bitmap1.bmp" />
     <Image Include="res\MFC_TeamProject.ico" />
     <Image Include="res\MFC_TeamProjectDoc.ico" />
     <Image Include="res\Toolbar.bmp" />

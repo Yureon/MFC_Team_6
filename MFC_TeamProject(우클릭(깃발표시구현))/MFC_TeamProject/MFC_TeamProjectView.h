@@ -50,11 +50,19 @@ public:
 	afx_msg void OnDifficultyChallenge();
 	void DrawReset_Button(CDC* pDC);
 	void DrawBox(CDC* pDC);
-	void Flag(int x, int y);
+	void Flag(CDC *pc);
 	bool IsLbtnClicked;
+	bool IsRbtnClicked;
+	void OpenSurround(int x, int y);
+	int m_nflag;
+	int m_nmine;
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	bool DrawFromFile(CDC* pDC, int destX, int destY, int destWidth, int destHeight, LPCWSTR filePath, int srcX, int srcY);
-	void OpenSurround(int x,int y);
-	int m_nMine;
+	void DrawButton(CDC* pDC);
+	bool Game_status;
+	CRect Windowbox;
+	void DrawNumber(CDC* pDC);
+	CString str;
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전
