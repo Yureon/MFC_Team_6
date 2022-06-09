@@ -49,6 +49,7 @@ public:
 	afx_msg void OnDifficultyMiddle();	//난이도
 	afx_msg void OnDifficultyHard();	//난이도
 	afx_msg void OnDifficultyChallenge();	//난이도
+	int difficulty;
 	
 	
 	bool Game_status; // 게임이 진행중인지,정지된 건지 확인하기 위한 변수 ( True - 진행중 / False - 승리 or 패배 )
@@ -63,12 +64,25 @@ public:
 	CRect Textbox_Reset;
 	CRect Textbox_Timer;
 	CRect Textbox_Score;
+	CRect Textbox_Flag;
 	CString Reset;
 	CString Timer;
 	CString Score;
+	CString Flag;
+	int m_flag;
+	int m_timer;
+	int m_score;
+	bool time_run;
+	
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	void DrawFlag(CDC* pDC);
 	bool DrawFromFile(CDC* pDC, int destX, int destY, int destWidth, int destHeight, LPCWSTR filePath, int srcX, int srcY);
+	
+	
+	
+	CString MenuText(CString str, int val, char c);
+	void F_Reset();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 #ifndef _DEBUG  // MFC_TeamProjectView.cpp의 디버그 버전

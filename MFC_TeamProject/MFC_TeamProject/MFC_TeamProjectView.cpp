@@ -34,6 +34,7 @@ BEGIN_MESSAGE_MAP(CMFCTeamProjectView, CView)
 	ON_COMMAND(ID_DIFFICULTY_CHALLENGE, &CMFCTeamProjectView::OnDifficultyChallenge)
 //	ON_WM_RBUTTONDOWN()
 ON_WM_RBUTTONDOWN()
+ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CMFCTeamProjectView 생성/소멸
@@ -41,21 +42,25 @@ END_MESSAGE_MAP()
 CMFCTeamProjectView::CMFCTeamProjectView() noexcept
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
-	bd.Difficulty(3);
+	difficulty = 3;
+	bd.Difficulty(difficulty);
 	bd.Reset();
 	bd.timer = 0;
 	bd.chas_x = 0;
 	bd.chas_y = 0;
-	
-	Windowbox = CRect(0, 0, 550, 600);
+	m_flag = bd.m_flag;
+	m_score = 0;
+	m_timer = 0;
 	Game_status = true;
+	time_run = true;
 	
+	Windowbox = CRect(0, 0, 550, 600);	
 	Textbox_Reset = CRect(230, 30, 280, 50);
 	Textbox_Timer = CRect(80, 60, 180, 80);
 	Textbox_Score = CRect(330, 60, 430, 80);
+	Textbox_Flag = CRect(180, 90, 320, 130);
 	Reset.Append(L"초기화");
-	Timer.Append(L"시간: ");
-	Score.Append(L"점수:");
+	
 }
 
 CMFCTeamProjectView::~CMFCTeamProjectView()
@@ -142,32 +147,56 @@ void CMFCTeamProjectView::OnLButtonDown(UINT nFlags, CPoint point)
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
 	if (Game_status) { // 이전에 지뢰를 클릭하지 않았을 때
+		if(time_run) SetTimer(1, 1000, NULL);
 		if (Windowbox.PtInRect(point)) { // 포인터가 Windowbox 범위 내부를 클릭하였을 때 (추적 함수를 for로 돌리기 때문에 불필요한 연산을 줄이기 위해서)
-			for (int i = 0; i < bd.boxCount; i++) { 
+				for (int i = 0; i < bd.boxCount; i++) { 
 				for (int j = 0; j < bd.boxCount; j++) {
 					if (bd.m_board[i][j].PtInRect(point)) {// 해당 상자의 위치를 for문으로 전부 추적함.
 						bd.chas_x = i;
 						bd.chas_y = j;
+						m_score += 20;
 					} //선택된 상자의 위치를 추적함.
 				}
 			}
-			if (bd.chas_x >= 0 && bd.chas_x <= 36 && bd.chas_y >= 0 && bd.chas_y <= 36) {
+			
+			if (bd.chas_x > 0 && bd.chas_x < 36 && bd.chas_y > 0 && bd.chas_y < 36) {
 				if(bd.check[bd.chas_x][bd.chas_y] == 0)
 				bd.check[bd.chas_x][bd.chas_y] = 1; //상자가 선택되었음을 배열에 표시함
 
 			if (bd.check[bd.chas_x][bd.chas_y] == 1 && bd.mine[bd.chas_x][bd.chas_y] < 0) {
 				Game_status = false;
+				KillTimer(1);
+				m_score -= 120;
 			}//선택된 상자에 지뢰가 있는 경우 false로 변경, ondraw에서 상자를 안그림
 			else if (bd.check[bd.chas_x][bd.chas_y] == 1 && bd.mine[bd.chas_x][bd.chas_y] > 0) {
 				Game_status = true;
+				
 			}//선택된 상자에 지뢰가 없는 경우,ondraw에서 해당하는 메소드를 실행함.
 
-			Invalidate();
+			
 }
+			time_run = false;
+			Invalidate();
 		}
 	}
 	
-	//if(Textbox_Reset.)
+	if (Textbox_Reset.PtInRect(point)) {
+		switch(difficulty) {
+			case 1:
+				OnDifficultyEasy();
+					break;
+			case 2:
+				OnDifficultyMiddle();
+					break;
+			case 3:
+				OnDifficultyHard();
+					break;
+			case 4:
+				OnDifficultyChallenge();
+				break;
+		}
+		Invalidate();
+	}
 
 	CView::OnLButtonDown(nFlags, point);
 }
@@ -176,9 +205,15 @@ void CMFCTeamProjectView::OnLButtonDown(UINT nFlags, CPoint point)
 void CMFCTeamProjectView::OnDifficultyEasy()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	bd.Difficulty(1);
+	difficulty = 1;
+	bd.Difficulty(difficulty);
 	bd.Reset();
+	m_flag = bd.m_flag;
 	Game_status = true;
+	KillTimer(1);
+	m_score = 0;
+	m_timer = 0;
+	time_run = true;
 	Invalidate();
 }
 
@@ -186,9 +221,15 @@ void CMFCTeamProjectView::OnDifficultyEasy()
 void CMFCTeamProjectView::OnDifficultyMiddle()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	bd.Difficulty(2);
+	difficulty = 2;
+	bd.Difficulty(difficulty);
 	bd.Reset();
+	m_flag = bd.m_flag;
 	Game_status = true;
+	KillTimer(1);
+	m_score = 0;
+	m_timer = 0;
+	time_run = true;
 	Invalidate();
 }
 
@@ -196,9 +237,15 @@ void CMFCTeamProjectView::OnDifficultyMiddle()
 void CMFCTeamProjectView::OnDifficultyHard()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	bd.Difficulty(3);
+	difficulty = 3;
+	bd.Difficulty(difficulty);
 	bd.Reset();
+	m_flag = bd.m_flag;
 	Game_status = true;
+	KillTimer(1);
+	m_score = 0;
+	m_timer = 0;
+	time_run = true;
 	Invalidate();
 }
 
@@ -206,9 +253,15 @@ void CMFCTeamProjectView::OnDifficultyHard()
 void CMFCTeamProjectView::OnDifficultyChallenge()
 {
 	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	bd.Difficulty(4);
+	difficulty = 4;
+	bd.Difficulty(difficulty);
 	bd.Reset();
+	m_flag = bd.m_flag;
 	Game_status = true;
+	KillTimer(1);
+	m_score = 0;
+	m_timer = 0;
+	time_run = true;
 	Invalidate();
 }
 
@@ -221,10 +274,14 @@ void CMFCTeamProjectView::DrawButton(CDC* pDC)
 	pDC->Rectangle(Textbox_Reset);
 	pDC->DrawText(Reset, Textbox_Reset, DT_CENTER && DT_VCENTER);
 	
+	Timer = MenuText(Timer, m_timer, 't');
 	pDC->DrawText(Timer, Textbox_Timer, DT_CENTER && DT_VCENTER);
 
+	Score = MenuText(Score, m_score, 's'); 
 	pDC->DrawText(Score, Textbox_Score, DT_CENTER && DT_VCENTER);
-
+	
+	Flag = MenuText(Flag, m_flag, 'f');
+	pDC->DrawText(Flag, Textbox_Flag, DT_CENTER && DT_VCENTER);
 }
 
 
@@ -267,9 +324,7 @@ void CMFCTeamProjectView::DrawNumber(CDC* pDC)
 						if (bd.mine[i + m][j + n] >= 0) {
 							str.Format(_T("%d"), bd.mine[i + m][j + n]); 
 							pDC->DrawTextW(str, bd.m_board[i + m][j + n], DT_CENTER && DT_VCENTER);
-							if (bd.mine[i + m][j + n] == 0) {
-								bd.check[i + m][j + n] = 1;
-							}
+							
 						}
 					}
 				}
@@ -299,13 +354,15 @@ void CMFCTeamProjectView::OnRButtonDown(UINT nFlags, CPoint point)
 
 			if (bd.check[bd.chas_x][bd.chas_y] == 0) {
 				bd.check[bd.chas_x][bd.chas_y] = 5; // 선택한 적 없는 상자에 깃발을 넣음.
+				m_flag--;
 			}
 			else if (bd.check[bd.chas_x][bd.chas_y] == 5) {
 				bd.check[bd.chas_x][bd.chas_y] = 0;	//깃발이 표시된 상자를 다시 한번 누르면 깃발을 해제함.
+				m_flag++;
 			}
 
 			Invalidate();
-}
+			}		
 		}
 	}
 
@@ -321,14 +378,22 @@ void CMFCTeamProjectView::DrawFlag(CDC* pDC)
 	
 	for (int i = 1; i < bd.boxCount; i++) {
 		for (int j = 1; j < bd.boxCount; j++) {
-			if (bd.check[i][j] == 5) {   // 해당 박스의 좌표에 우클릭 한 경우
+			if (bd.check[i][j] == 5 && m_flag != 0) {   // 해당 박스의 좌표에 우클릭 한 경우
 				board = bd.m_board[i][j].TopLeft(); // 박스의 좌표를 얻어오고
 				DrawFromFile(pDC,board.x, board.y, 48, 48, L"./res/0.jpg", bd.boxSize, bd.boxSize); // 박스의 크기에 맞게 해당 박스의 좌표에 삽입한다.
 			}
+			else if (bd.check[i][j] == 5 && m_flag == 0) {
+				bd.check[bd.chas_x][bd.chas_y] = 0;
+				CRect done(180, 90, 320, 130);
+				pDC->DrawTextW(L"깃발이 없습니다", done, DT_VCENTER && DT_CENTER);
+				board = bd.m_board[i][j].TopLeft(); // 박스의 좌표를 얻어오고
+				DrawFromFile(pDC, board.x, board.y, 48, 48, L"./res/0.jpg", bd.boxSize, bd.boxSize); // 박스의 크기에 맞게 해당 박스의 좌표에 삽입한다.
+				
+			}
 		}
 	}
+	if (m_flag < 0) m_flag == 0;
 }
-
 
 bool CMFCTeamProjectView::DrawFromFile(CDC* pDC, int destX, int destY, int destWidth, int destHeight, LPCWSTR filePath, int srcX, int srcY)
 {
@@ -340,4 +405,36 @@ bool CMFCTeamProjectView::DrawFromFile(CDC* pDC, int destX, int destY, int destW
 	image.Draw(pDC->m_hDC, destX, destY,srcX,srcY);
 	image.Detach();
 	return TRUE;
+}
+
+CString CMFCTeamProjectView::MenuText(CString str,int val,char c) {
+
+	CString buffer;
+	str.Empty();
+
+	switch (c) {
+	case 's':
+		str.Append(L"점수: ");
+		break;
+	case 't':
+		str.Append(L"시간: ");
+		break;
+	case 'f':
+		str.Append(L"깃발 개수: ");
+		break;
+	}
+	buffer.Format(_T("%d"), val);
+	str.Append(buffer);
+
+	return str;
+}
+
+void CMFCTeamProjectView::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	if (nIDEvent == 1) {
+		m_timer++;
+		
+	}
+	CView::OnTimer(nIDEvent);
 }

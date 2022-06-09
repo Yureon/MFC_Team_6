@@ -13,6 +13,7 @@ public:
 	int boxCount; // 난이도에 따라 변화할 박스의 개수를 저장할 변수
 	int boxSize; //난이도에 따라 변화할 박스의 크기를 저장할 변수
 	int mineCount; //난이도에 따라 변화할 지뢰의 개수를 저장할 변수
+	int m_flag;
 
 	int timer; // 게임 시작 시간을 저장할 변수
 	int score; // 점수를 저장할 변수
